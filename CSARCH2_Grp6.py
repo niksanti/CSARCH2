@@ -380,38 +380,32 @@ if __name__ == "__main__":
     sample_input = "16"
 
     listbox_label = tk.Label(text="Type:", font=("Courier 13"))
-    listbox_label.pack(padx=30, side = tk.LEFT)
+    listbox_label.pack(padx=260, anchor='nw')
 
-    listbox.pack(side = tk.LEFT)
+    listbox.pack(padx=230, anchor='nw')
 
-    scrollbar = tk.Scrollbar(window)
-    scrollbar.pack(side = tk.LEFT)
 
     items = ['Sequential', 'Random', 'Mid-repeat']
 
     for item in items:
         listbox.insert(tk.END, item)
 
-    listbox.config(yscrollcommand=scrollbar.set)
+    listbox.config()
 
-    # setting scrollbar command parameter
-    # to listbox.yview method its yview because
-    # we need to have a vertical view
-    scrollbar.config(command=listbox.yview)
 
     input_text_label = tk.Label(text="Input", font=("Courier 13"))
     input_text = tk.Text(window, font=("Courier 13"), height=3, width=30)
     input_text.insert(tk.END, sample_input)
-    input_text_label.pack(padx=30)
-    input_text.pack(expand=False,padx=30, pady=20)
+    input_text_label.pack(padx=30, pady=20, anchor='n', side='left')
+    input_text.pack(expand=False,padx=30, pady=20, anchor='n', side='left')
 
     compute_btn = tk.Button(window, text="Final Snapshot",width=30, command=finalSnapshot)
     reset_btn = tk.Button(window, text="Reset", width=30, state=tk.DISABLED, command=reset)
-    reset_btn.pack()
+    reset_btn.pack(anchor='n')
     steps_btn = tk.Button(window, text="Next", width=30, state=tk.DISABLED, command=steps_snapshot)
 
-    steps_btn.pack()
-    compute_btn.pack()
+    steps_btn.pack(anchor='n')
+    compute_btn.pack(anchor='n')
 
 
 
@@ -436,7 +430,7 @@ if __name__ == "__main__":
                                       "\tblock 2: 0\n"
                                       "\tblock 3: 0\n\n", font=("Courier 12"))
 
-    instructions_text.pack(pady = (30,200), anchor = "center", side = 'left')
+    instructions_text.pack(pady = (0,200), anchor = "center", side = 'left')
 
 
 
@@ -465,8 +459,8 @@ if __name__ == "__main__":
 
     text_log_label = tk.Label(text="Text Log:", font=("Courier 13"))
 
-    text_log_label.pack(padx=(30,0), anchor = "center", side = 'left', pady = (30,200))
-    text_log.pack(anchor = "center", side = 'left', pady = (30,200))
+    text_log_label.pack(padx=(30,0), anchor = "w", side = 'left', pady = (0,200))
+    text_log.pack(anchor = "w", side = 'left', pady = (0,200))
 
 
 
