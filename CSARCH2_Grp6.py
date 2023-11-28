@@ -429,11 +429,6 @@ if __name__ == "__main__":
     input_text.pack(expand=False,padx=30, anchor='n', side='left')
 
 
-    output_scrollbar = tk.Scrollbar(window)
-
-    output_scrollbar.pack()
-
-
 
     instructions_text = ScrolledText(window, width=50,  height=30)
 
@@ -465,7 +460,8 @@ if __name__ == "__main__":
 
     instructions_text.config(state = tk.DISABLED)
 
-
+    text_log_label = tk.Label(text="Text Log:", font=("Courier 13"))
+    text_log_label.pack(padx=(30,0), anchor = "w", side = 'left')
     text_log = ScrolledText(window, width=50,  height=30)
     text_log.pack(side = 'left')
 
@@ -494,10 +490,6 @@ if __name__ == "__main__":
 
     text_log.config(state = tk.DISABLED)
 
-    text_log_label = tk.Label(text="Text Log:", font=("Courier 13"))
-
-    text_log_label.pack(padx=(30,0), anchor = "w", side = 'left')
-    text_log.pack(anchor = "w", side = 'left')
 
     compute_btn = tk.Button(window, text="Final Snapshot",width=30, command=finalSnapshot)
     reset_btn = tk.Button(window, text="Reset", width=30, state=tk.DISABLED, command=reset)
