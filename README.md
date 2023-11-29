@@ -52,18 +52,18 @@ Figure 1.1 Snapshot of Sequential 4 way BSA+MRU n=8
 
 
 
-Example Sequence (if n=16): 0, 1, 2, 3, ..., 31, 0, 1, 2, 3, ..., 31, 0, 1, 2, 3, ..., 31, 0, 1, 2, 3, ..., 31
+### Example Sequence (if n=16): 0, 1, 2, 3, ..., 31, 0, 1, 2, 3, ..., 31, 0, 1, 2, 3, ..., 31, 0, 1, 2, 3, ..., 31
 
 In this example sequence, it can be observed that there are a lot more misses than hits this time around. The pattern of replacement can also be observed wherein there are 3 hits for a recurring value in each of the sets. There is also a noticeable pattern wherein the previous value from block 3 will have 2 hits for it in block 2, and a previous value from block 2 will have 1 hit for it in block 1.
 
-
+![image](https://github.com/niksanti/CSARCH2/assets/64532697/a3fd9eea-1eff-4c8a-9fee-76f3055e70ec)
 
 
 
 		Figure 1.2 Tracing of Cache Replacement for n=16
 
 
-Example Sequence (if n=32): 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63
+### Example Sequence (if n=32): 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63
 
 Analysis: Using the same configurations, the sequential model for n=32 follows the same pattern but yields exponentially larger values. It can also be noticed that the miss rate is now significantly larger than the hit rate. This can indicate that as more integers are being read, more misses are highly likely to occur.
 
