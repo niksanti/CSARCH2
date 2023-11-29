@@ -3,6 +3,7 @@
 import math
 import tkinter as tk
 import random
+from tkinter.scrolledtext import ScrolledText
 
 output_steps = []
 output_log = []
@@ -242,12 +243,13 @@ def selectionFill(selected, addresses):
     elif selected == 'Random':
         temp_address = range_of_address * 4
         for idx in range(temp_address):
-            address_array.append(random.randint(0, range_of_address))
+            address_array.append(random.randint(0, temp_address))
     elif selected == 'Mid-repeat':
         temp_address = range_of_address * 2
         for i in range(4):
             for idx in range(range_of_address):
-                address_array.append(idx)
+                if idx != range_of_address - 1:
+                    address_array.append(idx)
 
             for idx in range(temp_address):
                 if idx != 0:
@@ -257,6 +259,9 @@ def selectionFill(selected, addresses):
 
 def finalSnapshot():
     typeSelection = getSelected()
+    cache_access_time = 1
+    miss_penalty = 321 # 1 + 32(10)
+
     print('this is type: ', typeSelection)
     SD = [4]
     ff = open("result.txt", "w")
@@ -292,8 +297,28 @@ def finalSnapshot():
 
     ff.close()
 
-    instructions_text.config(text=output_steps[-1], font=("Courier 12"), justify='center')
-    text_log.config(text=output_log[-1], font=("Courier 12"), justify='center', fg="#6F6F6F")
+    # access time init
+    hit_rate = (test.hit_count) / len(address)
+    miss_rate = (test.miss_count) / len(address)
+    ave_access_time = (hit_rate*cache_access_time) + (miss_rate*miss_penalty)
+    total_access_time = (test.hit_count*32*1) + (test.miss_count*(miss_penalty))
+    # testing
+    print("Hit Rate: %f" % hit_rate)
+    print("Miss Rate: %f" % miss_rate)
+    print("Ave Access Time: %f" % ave_access_time)
+    # concat
+    access_time = output_steps[-1] + 'Hit Rate: ' + str(hit_rate) + '\n' + 'Miss Rate: ' + str(miss_rate) + '\n' + 'Average Access Time: ' + str(ave_access_time) + '\n' + 'Total Access Time: ' + str(total_access_time) + '\n'
+
+    instructions_text.config(state=tk.NORMAL)
+    instructions_text.delete("1.0", "end")
+    instructions_text.insert(tk.INSERT, access_time)
+    instructions_text.config(state=tk.DISABLED)
+
+    text_log.config(state=tk.NORMAL)
+    text_log.delete("1.0", "end")
+    text_log.insert(tk.INSERT, output_log[-1])
+    text_log.config(state=tk.DISABLED)
+
     reset_btn['state'] = tk.NORMAL
     compute_btn['state'] = tk.DISABLED
     steps_btn['state'] = tk.NORMAL
@@ -303,9 +328,15 @@ def steps_snapshot():
 
 
     if steps_counter < len(output_steps):
-        instructions_text.config(text=output_steps[steps_counter], font=("Courier 12"), justify='center')
-        text_log.config(text=output_log[steps_counter], font=("Courier 12"), justify='center', fg="#6F6F6F")
+        instructions_text.config(state=tk.NORMAL)
+        instructions_text.delete("1.0", "end")
+        instructions_text.insert(tk.INSERT, output_steps[steps_counter])
+        instructions_text.config(state=tk.DISABLED)
 
+        text_log.config(state=tk.NORMAL)
+        text_log.delete("1.0", "end")
+        text_log.insert(tk.INSERT, output_log[steps_counter])
+        text_log.config(state=tk.DISABLED)
     steps_counter +=1
 
     if steps_counter == len(output_steps):
@@ -313,52 +344,67 @@ def steps_snapshot():
 
 
 def reset():
-    global  output_steps, steps_counter
+    global  output_steps, steps_counter, output_log
     steps_counter = 0
     output_steps = []
+    output_log = []
     reset_btn['state'] = tk.DISABLED
     compute_btn['state'] = tk.NORMAL
     steps_btn['state'] = tk.DISABLED
-    text_log.config(text="set 0:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n"
-                                      "set 1:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n"
-                                      "set 2:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n"
-                                      "set 3:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n", font=("Courier 12"), fg="#6F6F6F")
-    instructions_text.config(text="set 0:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n"
-                                      "set 1:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n"
-                                      "set 2:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n"
-                                      "set 3:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n", font=("Courier 12"), justify='center')
+
+    temp_text = "set 0:\n\n" \
+    "\tblock 0: 0\n" \
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+    "set 1:\n\n"\
+    "\tblock 0: 0\n"\
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+    "set 2:\n\n"\
+    "\tblock 0: 0\n"\
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+    "set 3:\n\n"\
+    "\tblock 0: 0\n"\
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+
+    instructions_text.config(state=tk.NORMAL)
+    instructions_text.delete("1.0", "end")
+    instructions_text.insert(tk.INSERT, temp_text)
+    instructions_text.config(state=tk.DISABLED)
+
+
+    temp_text = "set 0:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+    "set 1:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+    "set 2:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+    "set 3:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+
+    text_log.config(state=tk.NORMAL)
+    text_log.delete("1.0", "end")
+    text_log.insert(tk.INSERT, temp_text)
+    text_log.config(state=tk.DISABLED)
+
 
 def getSelected():
     currVar = listbox.curselection()
@@ -380,9 +426,9 @@ if __name__ == "__main__":
     sample_input = "16"
 
     listbox_label = tk.Label(text="Type:", font=("Courier 13"))
-    listbox_label.pack(padx=260, anchor='nw')
+    listbox_label.pack(anchor='nw')
 
-    listbox.pack(padx=230, anchor='nw')
+    listbox.pack(anchor='nw')
 
 
     items = ['Sequential', 'Random', 'Mid-repeat']
@@ -396,81 +442,79 @@ if __name__ == "__main__":
     input_text_label = tk.Label(text="Input", font=("Courier 13"))
     input_text = tk.Text(window, font=("Courier 13"), height=3, width=30)
     input_text.insert(tk.END, sample_input)
-    input_text_label.pack(padx=30, pady=20, anchor='n', side='left')
-    input_text.pack(expand=False,padx=30, pady=20, anchor='n', side='left')
+    input_text_label.pack(padx=30,anchor='n', side='left')
+    input_text.pack(expand=False,padx=30, anchor='n', side='left')
+
+
+
+    instructions_text = ScrolledText(window, width=50,  height=30)
+
+    instructions_text.pack(side=tk.LEFT)
+
+
+    text = "set 0:\n\n" \
+    "\tblock 0: 0\n" \
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+    "set 1:\n\n"\
+    "\tblock 0: 0\n"\
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+    "set 2:\n\n"\
+    "\tblock 0: 0\n"\
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+    "set 3:\n\n"\
+    "\tblock 0: 0\n"\
+    "\tblock 1: 0\n"\
+    "\tblock 2: 0\n"\
+    "\tblock 3: 0\n\n"\
+
+    instructions_text.insert(tk.INSERT, text)
+
+    instructions_text.config(state = tk.DISABLED)
+
+    text_log_label = tk.Label(text="Text Log:", font=("Courier 13"))
+    text_log_label.pack(padx=(30,0), anchor = "w", side = 'left')
+    text_log = ScrolledText(window, width=50,  height=30)
+    text_log.pack(side = 'left')
+
+    text = "set 0:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+    "set 1:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+    "set 2:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+    "set 3:\n\n"\
+    "\tblock 0: \n"\
+    "\tblock 1: \n"\
+    "\tblock 2: \n"\
+    "\tblock 3: \n\n"\
+
+    text_log.insert(tk.INSERT, text)
+
+    text_log.config(state = tk.DISABLED)
+
 
     compute_btn = tk.Button(window, text="Final Snapshot",width=30, command=finalSnapshot)
     reset_btn = tk.Button(window, text="Reset", width=30, state=tk.DISABLED, command=reset)
-    reset_btn.pack(anchor='n')
+    reset_btn.pack(anchor='s')
     steps_btn = tk.Button(window, text="Next", width=30, state=tk.DISABLED, command=steps_snapshot)
 
-    steps_btn.pack(anchor='n')
-    compute_btn.pack(anchor='n')
-
-
-
-    instructions_text = tk.Label(text="set 0:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n"
-                                      "set 1:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n"
-                                      "set 2:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n"
-                                      "set 3:\n\n"
-                                      "\tblock 0: 0\n"
-                                      "\tblock 1: 0\n"
-                                      "\tblock 2: 0\n"
-                                      "\tblock 3: 0\n\n", font=("Courier 12"))
-
-    instructions_text.pack(pady = (0,200), anchor = "center", side = 'left')
-
-
-
-
-
-    text_log = tk.Label(text="set 0:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n"
-                                      "set 1:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n"
-                                      "set 2:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n"
-                                      "set 3:\n\n"
-                                      "\tblock 0: \n"
-                                      "\tblock 1: \n"
-                                      "\tblock 2: \n"
-                                      "\tblock 3: \n\n", font=("Courier 12"), fg="#6F6F6F")
-
-    text_log_label = tk.Label(text="Text Log:", font=("Courier 13"))
-
-    text_log_label.pack(padx=(30,0), anchor = "w", side = 'left', pady = (0,200))
-    text_log.pack(anchor = "w", side = 'left', pady = (0,200))
-
-
-
-
-
-
-
-
-
-
+    steps_btn.pack(anchor='s')
+    compute_btn.pack(anchor='s')
 
 
 
