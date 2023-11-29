@@ -513,7 +513,4 @@ if __name__ == "__main__":
     steps_btn.pack(anchor='s')
     compute_btn.pack(anchor='s')
 
-
-
-
     window.mainloop()
