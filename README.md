@@ -60,7 +60,7 @@ In this example sequence, it can be observed that there are a lot more misses th
 
 
 
-		Figure 1.2 Tracing of Cache Replacement for n=16
+Figure 1.2 Tracing of Cache Replacement for n=16
 
 
 ### Example Sequence (if n=32): 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63, 0, 1, 2, 3, …, 63
