@@ -51,7 +51,9 @@ Test Cases:
 
 a.) Sequential Sequence:
 Scenario Description: Sequential access to cache blocks up to 2n. Repeat the sequence four times.
-Example Sequence (if n=8): 0, 1, 2, 3, ..., 15, 0, 1, 2, 3, ..., 15, 0, 1, 2, 3, ..., 15, 0, 1, 2, 3, ..., 15
+
+### Example Sequence (if n=8): 0, 1, 2, 3, ..., 15, 0, 1, 2, 3, ..., 15, 0, 1, 2, 3, ..., 15, 0, 1, 2, 3, ..., 15
+
 Analysis: In a 4-way set-associative mapping, each set has four blocks. The sequential access will still benefit from spatial locality within each set and likely lead to cache hits as the next block in the sequence will be in the same set as the previous one especially since we are using the MRU replacement algorithm, which replaces the most recently used block within the set. For this example sequence, it also fits perfectly with the order of sets per sequence which would contribute to the fact there are more hits when compared with scenarios having a larger number of memory blocks.
 
 ![image](https://github.com/niksanti/CSARCH2/assets/64532697/16c9f532-8e95-41e1-b95b-e975317467fc)
