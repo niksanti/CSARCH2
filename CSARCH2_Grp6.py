@@ -243,7 +243,7 @@ def selectionFill(selected, addresses):
     elif selected == 'Random':
         temp_address = range_of_address * 4
         for idx in range(temp_address):
-            address_array.append(random.randint(0, temp_address))
+            address_array.append(random.randint(0, temp_address - 1))
     elif selected == 'Mid-repeat':
         temp_address = range_of_address * 2
         for i in range(4):
