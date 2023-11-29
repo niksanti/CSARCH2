@@ -7,7 +7,7 @@ pip install tk
 
 https://drive.google.com/drive/folders/1v6oT4TXgpLUnU2MUDh5-9tNL3MoLVXVK?usp=sharing
 
-**Note: Sometimes, the PC detects the exe file to be a virus. This is the fault of pyinstaller library's way of packing the python file into an executable program. No other way was found to pack the python file into an executable program. However, given the nature of python, the .py file can be executed normally by double pressing the file instead of editing it directly. This runs the python file as a normal executable program.
+**Note: Sometimes, the PC detects the exe file to be a virus. This is the fault of pyinstaller library's way of packing the python file into an executable program. No other way was found to pack the python file into an executable program. However, given the nature of python, the .py file can be executed normally by double pressing the .py file instead of editing it. This runs the python file as a normal executable program.
 
 ## Members
 
