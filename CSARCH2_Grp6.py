@@ -258,6 +258,9 @@ def selectionFill(selected, addresses):
 
 def finalSnapshot():
     typeSelection = getSelected()
+    cache_access_time = 1
+    miss_penalty = 321 # 1 + 32(10)
+
     print('this is type: ', typeSelection)
     SD = [4]
     ff = open("result.txt", "w")
@@ -293,9 +296,21 @@ def finalSnapshot():
 
     ff.close()
 
+    # access time init
+    hit_rate = (test.hit_count) / len(address)
+    miss_rate = (test.miss_count) / len(address)
+    ave_access_time = (hit_rate*cache_access_time) + (miss_rate*miss_penalty)
+    total_access_time = (test.hit_count*32*1) + (test.miss_count*(miss_penalty))
+    # testing
+    print("Hit Rate: %f" % hit_rate)
+    print("Miss Rate: %f" % miss_rate)
+    print("Ave Access Time: %f" % ave_access_time)
+    # concat
+    access_time = output_steps[-1] + 'Hit Rate: ' + str(hit_rate) + '\n' + 'Miss Rate: ' + str(miss_rate) + '\n' + 'Average Access Time: ' + str(ave_access_time) + '\n' + 'Total Access Time: ' + str(total_access_time) + '\n'
+
     instructions_text.config(state=tk.NORMAL)
     instructions_text.delete("1.0", "end")
-    instructions_text.insert(tk.INSERT, output_steps[-1])
+    instructions_text.insert(tk.INSERT, access_time)
     instructions_text.config(state=tk.DISABLED)
 
     text_log.config(state=tk.NORMAL)
@@ -328,9 +343,10 @@ def steps_snapshot():
 
 
 def reset():
-    global  output_steps, steps_counter
+    global  output_steps, steps_counter, output_log
     steps_counter = 0
     output_steps = []
+    output_log = []
     reset_btn['state'] = tk.DISABLED
     compute_btn['state'] = tk.NORMAL
     steps_btn['state'] = tk.DISABLED

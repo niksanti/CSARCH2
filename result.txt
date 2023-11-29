@@ -1,0 +1,5 @@
+Block size = 16 (Byte)
+Cache size = 1024K (Byte)
+Set degree = 4
+Miss rate = 0.500000
+
