@@ -8,6 +8,7 @@ from tkinter.scrolledtext import ScrolledText
 output_steps = []
 output_log = []
 steps_counter = 0
+sequence_array = []
 
 
 def append_step(sets, block_address, action, cache_hit, cache_miss):
@@ -32,6 +33,8 @@ def append_step(sets, block_address, action, cache_hit, cache_miss):
 
     text += 'memory block read: ' + str(block_address) + '\n'
 
+    text += 'memory access count: ' + str(cache_hit + cache_miss) + '\n'
+
     if action == 'Hit':
         text += 'CACHE HIT! \n'
     else:
@@ -45,6 +48,13 @@ def append_step(sets, block_address, action, cache_hit, cache_miss):
     log_text = ''
 
     i = 0
+
+    sequence_array.append(str(block_address))
+
+    stripped_list = map(str.strip, sequence_array)
+    temp_sequence = ', '.join(stripped_list)
+
+    log_text += 'Sequence: ' + temp_sequence + '\n\n'
 
     for set_ in sets:
         log_text += "set " + str(i) + ": \n\n"
@@ -65,9 +75,9 @@ def append_step(sets, block_address, action, cache_hit, cache_miss):
 
 class blocks:
     def __init__(self):
-        self.valid = True  # true -> empty ; false -> not empty
+        self.valid = True
         self.tag = -1
-        self.count = 0  # the greater the count is, the less the block is used since last time
+        self.count = 0
         self.address_in_decimal = -1
         self.address = -1
         self.log = []
@@ -85,22 +95,22 @@ class cache:
         self.CS_CacheSize = CS_CacheSize
         self.SD_SetDegree = SD_SetDegree
 
-        self.CBN_CacheBlockNumber = 16  # The number of "Cache Block"
+        self.CBN_CacheBlockNumber = 16
         print("\nThere are %d Cache Blocks" % (self.CBN_CacheBlockNumber))
-        self.SN_SetNumber = 4 # The number of set
+        self.SN_SetNumber = 4
 
-        self.sets = [sets(SD_SetDegree) for i in range(self.SN_SetNumber)]  # 在 cache SN_SetNumber cache set
+        self.sets = [sets(SD_SetDegree) for i in range(self.SN_SetNumber)]
         print(str(self.SD_SetDegree) + "-way associative cache, with " + str(self.SN_SetNumber) + " sets.")
 
         self.hit_count = 0
         self.miss_count = 0
 
-    def read_from_cache(self, address_in_decimal):  # check data是否在cache中
+    def read_from_cache(self, address_in_decimal):
         global output_steps
-        block_address = address_in_decimal # 將 decimal address Block address
+        block_address = address_in_decimal
         set_number = int(address_in_decimal % self.SN_SetNumber)  # set
         tag = math.floor(address_in_decimal / self.SN_SetNumber)  # tag
-        # print("\nset: %d, tag: %d" % (set_number, tag))
+
 
         if self.IsEmpty(set_number):
             #print("Set %d is empty" % (set_number))
@@ -180,7 +190,7 @@ class cache:
                 if self.sets[set_number].blocks[i].count < max_count:
                     max_count = self.sets[set_number].blocks[i].count
                     MRU_index = i
-            # print("***Tag: %d is kicked out***" % self.sets[set_number].blocks[MRU_index].tag)
+
             self.sets[set_number].blocks[MRU_index].tag = tag
             self.sets[set_number].blocks[MRU_index].address_in_decimal = block_address
             self.add_count(set_number)
@@ -243,7 +253,7 @@ def selectionFill(selected, addresses):
     elif selected == 'Random':
         temp_address = range_of_address * 4
         for idx in range(temp_address):
-            address_array.append(random.randint(0, temp_address - 1))
+            address_array.append(random.randint(0, temp_address -1))
     elif selected == 'Mid-repeat':
         temp_address = range_of_address * 2
         for i in range(4):
@@ -264,7 +274,7 @@ def finalSnapshot():
 
     print('this is type: ', typeSelection)
     SD = [4]
-    ff = open("result.txt", "w")
+
     for SD_SetDegree in SD:  # 一 set cache block
 
         BS_BlockSize = 16
@@ -276,7 +286,6 @@ def finalSnapshot():
         address = selectionFill(typeSelection[0], f)
         print(address)
 
-        # 嘗試從 cache 讀取 trace.txt 中的所有 binary address
         for idx in range(len(address)):
             address_in_decimal = int(address[idx])
             # print("Address in decimal: %d" % (address_in_decimal))
@@ -285,17 +294,6 @@ def finalSnapshot():
         test.print()
         print("The number of request: %d, Hit_count: %d" % (len(address), test.hit_count))
         print("Miss rate: %f\n-" % (1.0 - (test.hit_count) / len(address)))
-
-        input = "Block size = %d (Byte)\n" % (BS_BlockSize)
-        ff.write(input)
-        input = "Cache size = %dK (Byte)\n" % (CS_CacheSize)
-        ff.write(input)
-        input = "Set degree = %d\n" % (SD_SetDegree)
-        ff.write(input)
-        input = "Miss rate = %f\n\n" % (1 - (test.hit_count) / len(address))
-        ff.write(input)
-
-    ff.close()
 
     # access time init
     hit_rate = (test.hit_count) / len(address)
@@ -344,13 +342,14 @@ def steps_snapshot():
 
 
 def reset():
-    global  output_steps, steps_counter, output_log
+    global  output_steps, steps_counter, output_log, sequence_array
     steps_counter = 0
     output_steps = []
     output_log = []
     reset_btn['state'] = tk.DISABLED
     compute_btn['state'] = tk.NORMAL
     steps_btn['state'] = tk.DISABLED
+    sequence_array = []
 
     temp_text = "set 0:\n\n" \
     "\tblock 0: 0\n" \
