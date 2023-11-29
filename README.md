@@ -80,7 +80,7 @@ Analysis: The random sequence will most likely result in more cache misses, as t
 c.) Mid-Repeat Blocks:
 Scenario Description: Start at block 0, repeat the sequence in the middle two times up to n-1 blocks, after which continue up to 2n. Repeat the sequence four times.
 
-Example Sequence (if n=8): 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 {4x}
+### Example Sequence (if n=8): 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 {4x}
 
 Analysis: In this scenario, it involves a mix of sequential and non-sequential accesses. Also, since the sequence repeats midway, it will result in more cache hits than sequential sequence because we are using the MRU replacement algorithm. It has a faster average access time because a mid-repeat pattern introduces repetition in the middle section of the sequence. This means that the elements in the middle of the sequence are accessed more frequently than the surrounding elements. In an MRU algorithm, this repetition in the middle results in those specific elements being kept in the cache as the most recently used, optimizing the use of those frequently accessed in the cache.
 
@@ -88,7 +88,7 @@ Analysis: In this scenario, it involves a mix of sequential and non-sequential a
 
 Figure  1.4 Snapshot of Mid-Repeat 4 way BSA+MRU n=8
 
-Example Sequence (if n=16): 0, …, 14, 1, …, 31, 0, …, 14, 1, …,31, 0, …, 14, 1, …, 31, 0, …, 31
+### Example Sequence (if n=16): 0, …, 14, 1, …, 31, 0, …, 14, 1, …,31, 0, …, 14, 1, …, 31, 0, …, 31
 
 Analysis: Similar to the n=8 sequence, this pattern creates a sequence that starts sequentially and then repeats with a shift, introducing variation in the sequence. The mid-repeat phase ensures that the sequence doesn't become entirely predictable and adds some complexity to the pattern. After completing the sequential phase, there is a mid-repeat phase. During the mid-repeat phase, the sequence is repeated, but with a modification. The modification involves repeating the sequence but excluding the first element. This creates a shift in the sequence.
 
