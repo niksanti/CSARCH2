@@ -3,6 +3,15 @@
 ## Dependencies
 pip install tk
 
+## Members
+
+GUANZON, CARLOS ANTONIO
+MARASIGAN, MARC DANIEL
+SANTIAGO, NIKOLAI ANDRE 
+VILLARAMA, KENN MICHAEL
+
+Section: S13
+
 
 ## Full Specification of the cache simulation system
 
